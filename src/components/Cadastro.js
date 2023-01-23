@@ -6,39 +6,45 @@ import styled from "styled-components"
 
 export default function PaginaPrincipal() {
     const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [confirmPassword, setconfirmPassword] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    function home(){
-        navigate("/home")
-    }
-
-    function loginConta(event){
+    function dadosConta(event){
         event.preventDefault();
         axios
-            .post(`http://localhost:5000/`, {
+            .post(`http://127.0.0.1:5000/cadastro`, {
                 email: email,
+                name: name,
+                confirmPassword: confirmPassword,
                 password: password
             } )
-            .then(home)
+            .then(pagina)
             .catch((erro) => console.log(erro))
+    }
+
+    function pagina(){
+        
+        navigate("/")
     }
 
     return (
         <HomeStyled>
             <h1>MyWallet</h1>
-            <form onSubmit={loginConta}>    
+            <form onSubmit={dadosConta}>  
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="nome" required></input>  
                 <input type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="email" required></input>
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="senha" required></input>
-                <button type="submit" >Entrar</button>
+                <input type="text" value={password} onChange={e => setPassword(e.target.value)} placeholder="senha" required></input>
+                <input type="text" value={confirmPassword} onChange={e => setconfirmPassword(e.target.value)} placeholder="Confirme a senha" required></input>
+                <button type="submit" >Cadastrar</button>
             </form>
-            <Link to={"/cadastro"}><p>Primeira vez? Cadastre-se!</p></Link>
+            <Link to={"/"}><p>Já tem uma conta? Faça login!</p></Link>
         </HomeStyled>
     )
 }
 
 const HomeStyled = styled.div`
-    height: 100%;
     display: flex;
     flex-direction: column;
     background: #8C11BE;
@@ -56,7 +62,7 @@ const HomeStyled = styled.div`
         height: 45px;
         margin: 6px 36px;
 
-        
+        background: #FFFFFF;
         border: 1px solid #D5D5D5;
         border-radius: 5px;
         ::placeholder{
