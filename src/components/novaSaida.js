@@ -5,57 +5,52 @@ import styled from "styled-components"
 
 
 export default function PaginaPrincipal() {
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
-    const [confirmPassword, setconfirmPassword] = useState("");
-    const [password, setPassword] = useState("");
+    const [valor, setValor] = useState("");
+    const [descricao, setDescricao] = useState("");
     const navigate = useNavigate();
+    const operacao = "subtração"
 
-    function dadosConta(event){
+    function home(){
+        navigate("/home")
+    }
+
+    function loginConta(event){
         event.preventDefault();
         axios
-            .post(`http://127.0.0.1:5000/cadastro`, {
-                email: email,
-                name: name,
-                confirmPassword: confirmPassword,
-                password: password
+            .post(`http://localhost:5000/nova-saida`, {
+                valor: valor,
+                descricao: descricao,
+                operacao,
+                // idUsuario: 
             } )
-            .then(pagina)
+            .then(home)
             .catch((erro) => console.log(erro))
     }
 
-    function pagina(){
-        
-        navigate("/")
-    }
-
     return (
-        <CadastroStyled>
-            <h1>MyWallet</h1>
-            <form onSubmit={dadosConta}>  
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="nome" required></input>  
-                <input type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="email" required></input>
-                <input type="text" value={password} onChange={e => setPassword(e.target.value)} placeholder="senha" required></input>
-                <input type="text" value={confirmPassword} onChange={e => setconfirmPassword(e.target.value)} placeholder="Confirme a senha" required></input>
-                <button type="submit" >Cadastrar</button>
+        <HomeStyled>
+            <h1>Nova saída</h1>
+            <form onSubmit={loginConta}>    
+                <input type="text" value={valor} onChange={e => setValor(e.target.value)} placeholder="valor" required></input>
+                <input type="descricao" value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="descrição" required></input>
+                <button type="submit" >Nova saída</button>
             </form>
-            <Link to={"/"}><p>Já tem uma conta? Faça login!</p></Link>
-        </CadastroStyled>
+        </HomeStyled>
     )
 }
 
-const CadastroStyled = styled.div`
+const HomeStyled = styled.div`
     width: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     h1{
         text-align: center;
-        font-family: 'Saira Stencil One';
+        font-family: 'Raleway';
         font-style: normal;
-        font-weight: 400;
-        font-size: 32px;
-        line-height: 50px;
+        font-weight: 700;
+        font-size: 26px;
+        line-height: 31px;
         background: #8C11BE;
         color: #ffffff;
     }
@@ -64,7 +59,7 @@ const CadastroStyled = styled.div`
         height: 45px;
         margin: 6px 36px;
 
-        background: #FFFFFF;
+        
         border: 1px solid #D5D5D5;
         border-radius: 5px;
         ::placeholder{
