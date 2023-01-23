@@ -4,8 +4,6 @@ import axios from 'axios';
 import styled from "styled-components"
 import AuthContext from "../contexts/AuthContext"
 
-
-
 export default function PaginaPrincipal() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
