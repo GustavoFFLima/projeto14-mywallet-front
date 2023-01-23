@@ -35,9 +35,11 @@ export default function Home() {
                         <HasMovimetationsContainer>
                             {database.map(data => <Movimentation key={data._id}>
                                 <Esquerda>
-                                    {JSON.stringify(database)}
+                                    <Data>{("0" + new Date(data.created).getDate()).slice(-2)}/{("0" + new Date(data.created).getMonth() + 1).slice(-2)}</Data>
+                                    <Descricao>{data.descricao}</Descricao>
                                 </Esquerda>
                                 <Direita>
+                                    <Valor operacao={data.operacao}>{data.valor}</Valor>
                                 </Direita>
                             </Movimentation>)}
                         </HasMovimetationsContainer>
@@ -126,8 +128,34 @@ const Esquerda = styled.div`
     display: flex;
 `;
 
+const Data = styled.p`
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #C6C6C6;
+`;
+
+const Descricao = styled.p`
+    margin-left: 10px;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #000000;
+    float: right;
+`;
+
 const Direita = styled.div`
     display: flex;
+`;
+
+const Valor = styled.p`
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: ${props => props.operacao === "adição" ? "#03AC00" : "#C70000"}
 `;
 
 const HomeStyled = styled.div`
