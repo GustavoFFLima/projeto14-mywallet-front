@@ -9,8 +9,7 @@ import NovaSaida from "./novaSaida"
 import AuthContext from "../contexts/AuthContext"
 
 export default function App() {
-    const [ userData, setUserData ] = useState()
-    setUserData(
+    const [ userData, setUserData ] = useState(
         {
             email: "",
             name: "",

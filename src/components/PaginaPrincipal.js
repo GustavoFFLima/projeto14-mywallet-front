@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import styled from "styled-components"
@@ -15,13 +15,16 @@ export default function PaginaPrincipal() {
     }
 
     function loginConta(event){
-        event.preventDefault();
+        event.preventDefault()
         axios
             .post(`http://localhost:5000/`, {
                 email: email,
                 password: password
             } )
-            .then(home)
+            .then((request) => {
+                setUserData({...userData, token: request.data});
+                home()
+            } )
             .catch((erro) => console.log(erro))
     }
 

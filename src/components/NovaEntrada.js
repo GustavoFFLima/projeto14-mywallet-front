@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import styled from "styled-components"
+import AuthContext from "../contexts/AuthContext"
 
 
 export default function PaginaPrincipal() {
     const [valor, setValor] = useState("");
     const [descricao, setDescricao] = useState("");
+    const { userData } = useContext(AuthContext);
     const navigate = useNavigate();
-    const operacao = "adição"
 
     function home(){
         navigate("/home")
@@ -20,9 +21,11 @@ export default function PaginaPrincipal() {
             .post(`http://localhost:5000/nova-entrada`, {
                 valor: valor,
                 descricao: descricao,
-                operacao,
-                // idUsuario: 
-            } )
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${userData.token}`
+                },
+            })
             .then(home)
             .catch((erro) => console.log(erro))
     }

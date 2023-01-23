@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { PlusCircle, SignOut, MinusCircle } from "phosphor-react";
 import styled from "styled-components"
+import axios from 'axios';
 
 
 export default function Home() {
     const navigate = useNavigate();
+    const [ database, setDatabase ] = useState([])
 
     function colocarValor(entrada){
         navigate(entrada)
     }
+
+    useEffect(() => {
+        axios
+            .get(`http://localhost:5000/home`)
+            .then((response) => setDatabase(response.data))
+            .catch((erro) => console.log(erro));
+    }, [])
 
     return (
         <HomeStyled>
@@ -18,7 +27,21 @@ export default function Home() {
                 <SignOut size={32} color="#ffffff" />
             </Header>
             <CarteiraStyled>
-                <p>test</p>
+                {database.length === 0 ? <NoMovimentations>
+                    <NoMovimetationsText>
+                        Não há registros de entrada ou saída
+                    </NoMovimetationsText>
+                </NoMovimentations> : <HasMovimetations>
+                        <HasMovimetationsContainer>
+                            {database.map(data => <Movimentation key={data._id}>
+                                <Esquerda>
+                                    {JSON.stringify(database)}
+                                </Esquerda>
+                                <Direita>
+                                </Direita>
+                            </Movimentation>)}
+                        </HasMovimetationsContainer>
+                    </HasMovimetations>}
             </CarteiraStyled>
             <Footer>
                 <button onClick={() => colocarValor("/nova-entrada")}>
@@ -61,6 +84,51 @@ const CarteiraStyled = styled.div`
     background: #FFFFFF;
     border-radius: 5px;
 `
+
+const NoMovimentations = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const NoMovimetationsText = styled.div`
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    color: #868686;
+    text-align: center;
+`;
+
+const HasMovimetations = styled.div`
+    position: relative;
+    width: 100%;
+    height: 99%;
+`;
+
+const HasMovimetationsContainer = styled.div`
+    width: 100%;
+    height: 94%;
+    overflow-y: scroll;
+`;
+
+const Movimentation = styled.div`
+    margin-bottom: 16px;
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+`;
+
+const Esquerda = styled.div`
+    display: flex;
+`;
+
+const Direita = styled.div`
+    display: flex;
+`;
 
 const HomeStyled = styled.div`
     width: 100vw;

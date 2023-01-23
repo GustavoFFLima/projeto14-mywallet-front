@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import styled from "styled-components"
+import AuthContext from "../contexts/AuthContext"
 
 
 export default function PaginaPrincipal() {
     const [valor, setValor] = useState("");
     const [descricao, setDescricao] = useState("");
+    const { userData } = useContext(AuthContext);
     const navigate = useNavigate();
-    const operacao = "subtração"
 
     function home(){
         navigate("/home")
@@ -17,23 +18,25 @@ export default function PaginaPrincipal() {
     function loginConta(event){
         event.preventDefault();
         axios
-            .post(`http://localhost:5000/nova-saida`, {
+            .post(`http://localhost:5000/nova-entrada`, {
                 valor: valor,
                 descricao: descricao,
-                operacao,
-                // idUsuario: 
-            } )
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${userData.token}`
+                },
+            })
             .then(home)
             .catch((erro) => console.log(erro))
     }
 
     return (
         <HomeStyled>
-            <h1>Nova saída</h1>
+            <h1>Nova entrada</h1>
             <form onSubmit={loginConta}>    
                 <input type="text" value={valor} onChange={e => setValor(e.target.value)} placeholder="valor" required></input>
                 <input type="descricao" value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="descrição" required></input>
-                <button type="submit" >Nova saída</button>
+                <button type="submit" >Salvar entrada</button>
             </form>
         </HomeStyled>
     )
